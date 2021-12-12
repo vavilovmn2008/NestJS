@@ -5,9 +5,9 @@ import {
   Post,
   Body,
   Delete,
-  Patch,
+  Put,
 } from '@nestjs/common';
-import { News, NewsService } from './news.service';
+import { News, NewsEdit, NewsService } from './news.service';
 
 @Controller('news')
 export class NewsController {
@@ -31,10 +31,9 @@ export class NewsController {
     return isRemoved ? 'Новость удалена' : 'Передан неверный идентификатор';
   }
 
-  @Patch('/:id')
-  changes(@Param('id') id: string): string {
+  @Put('/:id')
+  edit(@Param('id') id: string, @Body() news: NewsEdit): News {
     const idInt = parseInt(id);
-    const isСhanges = this.newsService.remove(idInt);
-    return isСhanges ? 'Новость изменена' : 'Передан неверный идентификатор';
+    return this.newsService.edit(idInt, news);
   }
 }

@@ -8,6 +8,13 @@ export interface News {
   countView?: number;
 }
 
+export interface NewsEdit {
+  title?: string;
+  description?: string;
+  author?: string;
+  countView?: number;
+}
+
 function getRandomInt(min: number, max: number): number {
   min = Math.ceil(min);
   max = Math.floor(max);
@@ -41,6 +48,17 @@ export class NewsService {
     return this.news.find((news) => news.id === id);
   }
 
+  edit(id: number, news: NewsEdit): News | undefined {
+    const indexEditNews = this.news.findIndex((news) => news.id === id);
+    if (indexEditNews !== -1) {
+      this.news[indexEditNews] = {
+        ...this.news[indexEditNews],
+        ...news,
+      };
+      return this.news[indexEditNews];
+    }
+    return undefined;
+  }
   remove(id: News['id']): boolean {
     const indexRemoveNews = this.news.findIndex((news) => news.id === id);
     if (indexRemoveNews !== -1) {
@@ -50,14 +68,4 @@ export class NewsService {
     return false;
   }
 
-  changes(news: News): News {
-    const id = getRandomInt(0, 99999);
-    const finalNews = {
-      ...news,
-      id: id,
-    };
-
-    this.news.push(finalNews);
-    return finalNews;
-  }
 }
